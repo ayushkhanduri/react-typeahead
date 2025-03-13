@@ -1,0 +1,54 @@
+import React, { FC, useCallback, useRef, useState } from 'react';
+import { useDebounceCallback } from '../shared/hooks/useDebouceCallback';
+import { useOutsideClick } from '../shared/hooks/useOutsideClick';
+import { Ellipsis } from './ellipsis';
+import style from './typeahead.module.css';
+
+type IProps = {
+    debounceTimer: number;
+    list: Array<any>;
+    onCallback: (value: string) => void;
+    minLength: number;
+    loading: boolean;
+    inputValue: string;
+}
+
+export const Typeahead: FC<IProps> = ({
+    debounceTimer, list, onCallback, minLength, loading, inputValue
+}) => {
+    const typeaheadRef = useRef<HTMLDivElement>(null);
+    const [value, setValue] = useState<string>(inputValue);
+    const [showDropdown, setDropdownState] = useState(false);
+    const debouncedCallback = useDebounceCallback(onCallback, debounceTimer);
+    const onInputCallback = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(event.target.value);
+        if (event.target.value?.length > minLength) {
+            debouncedCallback(event?.target?.value);
+        }
+    }, [minLength, debouncedCallback, setDropdownState]);
+    const hideDropdownState = useCallback(() => {
+        setDropdownState(false);
+    }, [setDropdownState]);
+
+    const showDropdownState = useCallback(() => {
+        setDropdownState(true);
+    }, [setDropdownState]);
+
+    useOutsideClick(typeaheadRef, hideDropdownState);
+    return (
+        <div ref={typeaheadRef} className={style['typeahead']}>
+            <input onFocus={showDropdownState} value={value} className={style['typeahead-input']} type="text" autoFocus={true} autoCorrect='off' autoComplete='off' autoCapitalize='off' onChange={onInputCallback} /> {loading ? <span>Loading</span> : null}
+            {list?.length && value && inputValue === value && showDropdown ?
+                <div className={style['dropdown-list']}>
+                    {list.slice(0, 20).map(item =>
+                        <div onClick={hideDropdownState} key={item.id} className={style['dropdown-item']}>
+                            <div className={style['detail']}> <b>Name: </b>{item.name} </div>
+                            <div className={style['detail']}> <b>Email:  </b> {item.email} </div>
+                            <div className={style['detail']} > <b>Description: </b> <Ellipsis size={64} text={item.body} /> </div>
+                        </div>
+                    )}
+                </div> : null
+            }
+        </div >
+    )
+}
