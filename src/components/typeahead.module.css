@@ -1,13 +1,21 @@
-.typeahead-input {
-    width: 100%;
+.typeahead {
+    font-size: 14px;
 }
 
+.typeahead-input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 .dropdown-list {
-    border: 1px solid black;
+    border: 1px solid #ccc;
     border-radius: 0.5rem;
     max-height: 200px;
-    overflow-x: scroll;
-    margin-top: 0.5rem;
+    overflow-y: scroll;
 }
 
 .dropdown-item {
@@ -15,9 +23,13 @@
 }
 
 .dropdown-item:not(:last-child) {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #ccc ;
 }
 
 .detail:not(:last-child) {
     margin-bottom: 0.5rem;
+}
+
+.label {
+    color: #676666;
 }

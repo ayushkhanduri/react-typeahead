@@ -42,9 +42,9 @@ export const Typeahead: FC<IProps> = ({
                 <div className={style['dropdown-list']}>
                     {list.slice(0, 20).map(item =>
                         <div onClick={hideDropdownState} key={item.id} className={style['dropdown-item']}>
-                            <div className={style['detail']}> <b>Name: </b>{item.name} </div>
-                            <div className={style['detail']}> <b>Email:  </b> {item.email} </div>
-                            <div className={style['detail']} > <b>Description: </b> <Ellipsis size={64} text={item.body} /> </div>
+                            <div className={style['detail']}> <b>Name: </b> <span className={style['label']}>{item.name} </span> </div>
+                            <div className={style['detail']}> <b>Email:  </b> <span className={style['label']}> {item.email} </span> </div>
+                            <div className={style['detail']} > <b>Description: </b> <span className={style['label']}> <Ellipsis size={64} text={item.body} /> </span></div>
                         </div>
                     )}
                 </div> : null
