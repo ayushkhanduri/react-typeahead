@@ -8,8 +8,13 @@ import { IDropdownValue, IResponse } from './shared/types';
 function App() {
     const [dropdownList, setDropdownList] = useState<Array<IDropdownValue>>([]);
     const [loading, setLoadingState] = useState<boolean>(false);
-    const [error, setError] = useState<string>(''); // can manage error states in the future
+    const [_error, setError] = useState<string>(''); // can manage error states in the future
     const [queryString, setQueryString] = useState<string>('');
+    const [_selectedValue, setSelectedValue] = useState<IDropdownValue | null>(null);
+    const onSelect = useCallback((value: IDropdownValue) => {
+        setSelectedValue(value);
+        setQueryString(value.name);
+    }, [setSelectedValue, setQueryString]);
     const getList = useCallback(async (value: string) => {
         setLoadingState(true);
         setError('');
@@ -34,7 +39,7 @@ function App() {
         <div className={styles['app']}>
             <div><h3>React Typeahead</h3> </div>
             <div className={styles['comment-type']}>
-                <Typeahead inputValue={queryString} loading={loading} debounceTimer={1500} minLength={3} onCallback={getList} list={dropdownList} />
+                <Typeahead onSelect={onSelect} inputValue={queryString} loading={loading} debounceTimer={1500} minLength={3} onCallback={getList} list={dropdownList} />
             </div>
         </div>
     );
